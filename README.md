@@ -1,4 +1,4 @@
-**`Lógica`**, juego de **`Consola`** y comparativas entre diferentes **`Estrategias`** del juego de mesa **_Pelusas_** en `C#` con `.NET 8`.
+**`Lógica`**, juego de **`Consola`** y comparativas de **`Estrategias`** del juego de mesa **_Pelusas_** en `C#` con `.NET 8`.
 
 El autor del juego de mesa es _Reiner Knizia_ y el distribuidor es _Mercurio_.
 
