@@ -2,19 +2,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
-		<LangVersion>12.0</LangVersion>
-	</PropertyGroup>
-
-	<PropertyGroup>
-		<ImplicitUsings>disable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-	</PropertyGroup>
-
-	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+	</PropertyGroup>
+
+	<PropertyGroup>
 		<SelfContained>true</SelfContained>
 		<PublishSingleFile>true</PublishSingleFile>
 		<PublishReadyToRun>true</PublishReadyToRun>
@@ -23,10 +15,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Pelusas.Logica\Pelusas.Logica.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Codigo\" />
 	</ItemGroup>
 
 </Project>

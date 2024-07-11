@@ -1,4 +1,5 @@
 ﻿
+using System.Reflection;
 using Pelusas.Helpers;
 using Pelusas.Logica;
 using Pelusas.Vista;
@@ -34,13 +35,29 @@ internal sealed class Program
 			o => { o.MinimaCantidad = 2; o.MaximaCantidad = 6; },
 			(tcb, js) =>
 				tcb
-				.Con1Tab("PELUSAS - NUEVA PARTIDA")
+				.Con1Tab("PELUSAS (de Reiner Knizia)")
+					.Con2Tab(_ObtenerCreditosCodigo())
+				.Con1Tab("NUEVA PARTIDA")
 					.Con2Tab("Introduce entre 2 y 6 jugadores.")
 					.Con2Tab($"Jugadores introducidos: {js.JoinStrings(", ")}")
 				.Con1Tab(
 					["Escribe el nombre de un/a nuevo/a jugador/a",
 					"o no escribas nada para terminar",
 					"y pulsa intro: "]));
+	}
+
+	private static string _ObtenerCreditosCodigo ()
+	{
+		var assembly = Assembly.GetExecutingAssembly();
+
+		var autor =
+			assembly.GetCustomAttributes<AssemblyCompanyAttribute>()
+			.Select(aca => aca.Company)
+			.First();
+
+		var version = assembly.GetName().Version!.ToString(2);
+
+		return $"Código de [{autor}]. Versión [{version}].";
 	}
 
 	private static bool _Buscar (

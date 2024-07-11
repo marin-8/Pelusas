@@ -5,9 +5,14 @@ VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pelusas.Consola", "Pelusas.Consola\Pelusas.Consola.csproj", "{25210586-A691-4BC5-B373-FDD4199CA994}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pelusas.Logica", "Pelusas.Logica\Pelusas.Logica.csproj", "{B19F0EA7-DD1B-4013-A200-52C7D41D4E29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pelusas.Logica", "Pelusas.Logica\Pelusas.Logica.csproj", "{B19F0EA7-DD1B-4013-A200-52C7D41D4E29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pelusas.Estrategias", "Pelusas.Estrategias\Pelusas.Estrategias.csproj", "{13589D01-47B3-485C-B45F-BBF9F50C02C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pelusas.Estrategias", "Pelusas.Estrategias\Pelusas.Estrategias.csproj", "{13589D01-47B3-485C-B45F-BBF9F50C02C5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1FA0A5AE-EE46-4D8A-B9B6-D31B270E5BF5}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

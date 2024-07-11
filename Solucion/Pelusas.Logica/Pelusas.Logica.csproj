@@ -1,15 +1,2 @@
 ﻿
-<Project Sdk="Microsoft.NET.Sdk">
-
-	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
-		<LangVersion>12.0</LangVersion>
-	</PropertyGroup>
-
-	<PropertyGroup>
-		<ImplicitUsings>disable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-	</PropertyGroup>
-
-</Project>
+<Project Sdk="Microsoft.NET.Sdk" />
