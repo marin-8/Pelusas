@@ -9,17 +9,22 @@ internal sealed class Program
 {
 	private const byte _CantidadCaracteresNombreJugadorMasLargo = 5;
 
-	private static readonly Input _Input = new() { Buscar = _Buscar, Robar = _Robar };
+	private static readonly Decisiones _Decisiones =
+		new() { Buscar = _Buscar, Robar = _Robar };
 
-	static void Main ()
+	private static void Main ()
 	{
 		while (true)
 		{
 			var jugadores = _PedirJugadores();
-			var partida = new Partida(_Input, jugadores);
+			var partida = new Partida(_Decisiones, jugadores);
 			var resultados = partida.Jugar();
 			var volverAJugar = _PreguntarSiVolverAJugar(resultados);
-			if (!volverAJugar) return;
+
+			if (!volverAJugar)
+			{
+				return;
+			}
 		}
 	}
 

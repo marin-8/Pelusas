@@ -5,19 +5,19 @@ public sealed class Partida
 {
 	private readonly Jugador[] _Jugadores;
 	private readonly Monton _Monton = new();
-	private readonly Input _InputJugador;
+	private readonly Decisiones _Decisiones;
 
 	public Partida (
-		Input input,
+		Decisiones decisiones,
 		params string[] nombresJugadores)
 	{
 		if (nombresJugadores.Length < 2 || nombresJugadores.Length > 6)
-			throw new ArgumentOutOfRangeException(
-				nameof(nombresJugadores),
-				"La cantidad de jugadores tiene que estar entre 2 y 6 (ambos incluídos).");
+			throw new ArgumentException(
+				"La cantidad de jugadores tiene que estar entre 2 y 6 (ambos incluídos).",
+				nameof(nombresJugadores));
 
 		_Jugadores = nombresJugadores.Select(nj => new Jugador(nj)).ToArray();
-		_InputJugador = input;
+		_Decisiones = decisiones;
 	}
 
 	public Resultados Jugar ()
@@ -28,12 +28,18 @@ public sealed class Partida
 			{
 				var restoJugadores = _Jugadores.Except([jugador]).ToArray();
 
-				_Turno(_Jugadores, jugador, restoJugadores, _Monton, _InputJugador);
+				_Turno(_Jugadores, jugador, restoJugadores, _Monton, _Decisiones);
 
-				if (_Monton.TotalCartas == 0) break;
+				if (_Monton.TotalCartas == 0)
+				{
+					break;
+				}
 			}
 
-			if (_Monton.TotalCartas == 0) break;
+			if (_Monton.TotalCartas == 0)
+			{
+				break;
+			}
 		}
 
 		foreach (var jugador in _Jugadores)
@@ -58,18 +64,24 @@ public sealed class Partida
 		Jugador jugadorTurno,
 		Jugador[] restoJugadores,
 		Monton monton,
-		Input input)
+		Decisiones decisiones)
 	{
 		_FaseRecoger(jugadorTurno);
 
 		while (true)
 		{
-			if (monton.TotalCartas == 0) return;
+			if (monton.TotalCartas == 0)
+			{
+				return;
+			}
 
 			var cartaCogidaMonton =
-				_FaseBuscar(todosJugadores, jugadorTurno, monton, input);
+				_FaseBuscar(todosJugadores, jugadorTurno, monton, decisiones);
 
-			if (cartaCogidaMonton is null) return;
+			if (cartaCogidaMonton is null)
+			{
+				return;
+			}
 
 			var algunOtroJugadorTieneCartasMismoValor =
 				restoJugadores.Any(j =>
@@ -83,7 +95,7 @@ public sealed class Partida
 					restoJugadores,
 					monton,
 					cartaCogidaMonton,
-					input);
+					decisiones);
 			}
 		}
 	}
@@ -104,13 +116,22 @@ public sealed class Partida
 		Jugador[] todosJugadores,
 		Jugador jugadorTurno,
 		Monton monton,
-		Input input)
+		Decisiones decisiones)
 	{
-		if (!input.Buscar(jugadorTurno.Nombre, todosJugadores, monton.TotalCartas))
+		var jugadorDecideBuscar =
+			decisiones.Buscar(jugadorTurno.Nombre, todosJugadores, monton.TotalCartas);
+
+		if (!jugadorDecideBuscar)
+		{
 			return null;
+		}
 
 		var cartaCogidaMonton = monton.Coger();
-		if (cartaCogidaMonton is null) return null;
+
+		if (cartaCogidaMonton is null)
+		{
+			return null;
+		}
 
 		if (_PierdeTurno(jugadorTurno, cartaCogidaMonton))
 		{
@@ -129,10 +150,10 @@ public sealed class Partida
 		Jugador[] restoJugadores,
 		Monton monton,
 		Carta cartaCogidaMonton,
-		Input input)
+		Decisiones decisiones)
 	{
 		var jugadorDecideRobar =
-			input.Robar(
+			decisiones.Robar(
 				jugador.Nombre, cartaCogidaMonton, todosJugadores, monton.TotalCartas);
 
 		if (jugadorDecideRobar)

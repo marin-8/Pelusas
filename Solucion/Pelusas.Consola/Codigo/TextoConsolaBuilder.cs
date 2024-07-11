@@ -3,44 +3,42 @@ using System.Text;
 
 namespace Pelusas.Vista;
 
-internal class TextoConsolaBuilder
+internal sealed class TextoConsolaBuilder
 {
-	private const char Intro = '\n';
-	private const string Tab1 = "    ";
-	private const string Tab2 = "        ";
-	private const string Tab3 = "            ";
-	private const string OpcionesPregunta = " (s/n): ";
+	private const char _Intro = '\n';
+	private const string _Tab1 = "    ";
+	private const string _Tab2 = "        ";
+	private const string _Tab3 = "            ";
+	private const string _OpcionesPregunta = " (s/n): ";
 
 	private readonly StringBuilder _StringBuilder = new();
 
 	private bool _PrimerTexto = true;
 
 	public TextoConsolaBuilder Con1Tab (string contenido)
-		=> _AnadirContenido(Tab1, contenido);
+		=> _AnadirContenido(_Tab1, contenido);
 
 	public TextoConsolaBuilder Con1Tab (IEnumerable<string> contenidos)
-		=> _AnadirContenidos(Tab1, contenidos);
+		=> _AnadirContenidos(_Tab1, contenidos);
 
 	public TextoConsolaBuilder Con2Tab (string contenido)
-		=> _AnadirContenido(Tab2, contenido);
+		=> _AnadirContenido(_Tab2, contenido);
 
 	public TextoConsolaBuilder Con2Tab (IEnumerable<string> contenidos)
-		=> _AnadirContenidos(Tab2, contenidos);
+		=> _AnadirContenidos(_Tab2, contenidos);
 
 	public TextoConsolaBuilder Con3Tab (string contenido)
-		=> _AnadirContenido(Tab3, contenido);
+		=> _AnadirContenido(_Tab3, contenido);
 
 	public TextoConsolaBuilder Con3Tab (IEnumerable<string> contenidos)
-		=> _AnadirContenidos(Tab3, contenidos);
+		=> _AnadirContenidos(_Tab3, contenidos);
 
 	public string Build ()
-	{
-		return _StringBuilder.ToString();
-	}
+		=> _StringBuilder.ToString();
 
 	public string BuildPregunta ()
 	{
-		_StringBuilder.Append(OpcionesPregunta);
+		_StringBuilder.Append(_OpcionesPregunta);
 		return Build();
 	}
 
@@ -49,7 +47,7 @@ internal class TextoConsolaBuilder
 	{
 		_GestionarPrimerTexto();
 
-		_StringBuilder.Append(Intro);
+		_StringBuilder.Append(_Intro);
 		_StringBuilder.Append(tab);
 		_StringBuilder.Append(contenido);
 
@@ -63,7 +61,7 @@ internal class TextoConsolaBuilder
 
 		foreach (var contenido in contenidos)
 		{
-			_StringBuilder.Append(Intro);
+			_StringBuilder.Append(_Intro);
 			_StringBuilder.Append(tab);
 			_StringBuilder.Append(contenido);
 		}
@@ -74,6 +72,6 @@ internal class TextoConsolaBuilder
 	private void _GestionarPrimerTexto ()
 	{
 		if (_PrimerTexto) _PrimerTexto = false;
-		else _StringBuilder.Append(Intro);
+		else _StringBuilder.Append(_Intro);
 	}
 }

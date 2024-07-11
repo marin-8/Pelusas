@@ -48,7 +48,10 @@ internal static class ConsolaManager
 
 			textoIntroducido = Console.ReadLine();
 
-			if (textoIntroducido is null) continue;
+			if (textoIntroducido is null)
+			{
+				continue;
+			}
 
 			if (textoIntroducido == opcionesPedirTextos.Terminador)
 			{
@@ -66,7 +69,7 @@ internal static class ConsolaManager
 		return textosIntroducido.ToArray();
 	}
 
-	public class OpcionesPedirTextos
+	public sealed class OpcionesPedirTextos
 	{
 		public byte MinimaCantidad { get; set; } = 0;
 		public byte MaximaCantidad { get; set; } = 255;

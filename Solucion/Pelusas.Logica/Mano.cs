@@ -3,47 +3,58 @@ namespace Pelusas.Logica;
 
 public sealed class Mano
 {
-	public Dictionary<Carta.Valores, List<Carta>> Cartas { get; init; } = [];
+	private readonly Dictionary<ValorCarta, List<Carta>> _Cartas = [];
+
+	public IReadOnlyDictionary<ValorCarta, List<Carta>> Cartas => _Cartas;
 
 	public void Anadir (Carta carta)
 	{
-		if (Cartas.TryGetValue(carta.Valor, out var cartas))
-			cartas.Add(carta);
+		if (_Cartas.TryGetValue(carta.Valor, out var cartasActuales))
+		{
+			cartasActuales.Add(carta);
+		}
 		else
 		{
-			Cartas.Add(carta.Valor, [carta]);
+			_Cartas.Add(carta.Valor, [carta]);
 		}
 	}
 
-	public void Anadir (Carta.Valores valor, List<Carta> cartas)
+	public void Anadir (ValorCarta valor, List<Carta> cartas)
 	{
-		if (Cartas.TryGetValue(valor, out var cartasActuales))
+		if (_Cartas.TryGetValue(valor, out var cartasActuales))
+		{
 			cartasActuales.AddRange(cartas);
+		}
 		else
 		{
-			Cartas.Add(valor, cartas);
+			_Cartas.Add(valor, cartas);
 		}
 	}
 
-	public bool ContieneAlgunaCartaPorValor (Carta.Valores valor)
-		=> Cartas.ContainsKey(valor);
+	public bool ContieneAlgunaCartaPorValor (ValorCarta valor)
+		=> _Cartas.ContainsKey(valor);
 
 	public byte TotalCartas
-		=> (byte)Cartas.Values.Sum(v => v.Count);
+		=> (byte)_Cartas.Values.Sum(v => v.Count);
 
 	public Carta[] Vaciar ()
 	{
-		if (Cartas.Count == 0) return [];
-		var cartas = Cartas.Values.SelectMany(lc => lc).ToArray();
-		Cartas.Clear();
+		if (_Cartas.Count == 0)
+		{
+			return [];
+		}
+
+		var cartas = _Cartas.Values.SelectMany(lc => lc).ToArray();
+		_Cartas.Clear();
+
 		return cartas;
 	}
 
-	public List<Carta> QuitarPorValor (Carta.Valores valor)
+	public List<Carta> QuitarPorValor (ValorCarta valor)
 	{
-		if (Cartas.TryGetValue(valor, out var cartasRobadas))
+		if (_Cartas.TryGetValue(valor, out var cartasRobadas))
 		{
-			Cartas.Remove(valor);
+			_Cartas.Remove(valor);
 			return cartasRobadas;
 		}
 		else
