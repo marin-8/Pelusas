@@ -19,8 +19,8 @@ internal sealed class Program
 	{
 		while (true)
 		{
-			var jugadores = _PedirJugadores();
-			var partida = new Partida(_Decisiones, jugadores);
+			var nombresJugadores = _PedirNombresJugadores();
+			var partida = new Partida(_Decisiones, nombresJugadores);
 			var resultados = partida.Jugar();
 			var volverAJugar = _PreguntarSiVolverAJugar(resultados);
 
@@ -31,7 +31,7 @@ internal sealed class Program
 		}
 	}
 
-	private static string[] _PedirJugadores ()
+	private static string[] _PedirNombresJugadores ()
 	{
 		return ConsolaManager.PedirTextos(
 			o => { o.MinimaCantidad = 2; o.MaximaCantidad = 6; },
