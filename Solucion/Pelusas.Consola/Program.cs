@@ -2,6 +2,8 @@
 using System.Reflection;
 using Pelusas.Helpers;
 using Pelusas.Logica;
+using Pelusas.Logica.Decisiones;
+using Pelusas.Logica.Elementos;
 using Pelusas.Vista;
 
 namespace Pelusas.Consola;
@@ -10,7 +12,7 @@ internal sealed class Program
 {
 	private const byte _CantidadCaracteresNombreJugadorMasLargo = 5;
 
-	private static readonly Decisiones _Decisiones =
+	private static readonly FuncionesDecisiones _Decisiones =
 		new() { Buscar = _Buscar, Robar = _Robar };
 
 	private static void Main ()
@@ -61,10 +63,12 @@ internal sealed class Program
 	}
 
 	private static bool _Buscar (
-		string nombreJugadorTurno,
-		Jugador[] jugadores,
-		byte totalCartasMonton)
+		DatosDecisionBuscar datosDecisionBuscar)
 	{
+		var nombreJugadorTurno = datosDecisionBuscar.JugadorTurno.Nombre;
+		var jugadores = datosDecisionBuscar.Jugadores;
+		var totalCartasMonton = datosDecisionBuscar.TotalCartasMonton;
+
 		return ConsolaManager.PreguntarSiNo(tb => tb
 			.Con1Tab($"FASE DE BUSCAR ({nombreJugadorTurno})")
 				.Con2Tab("Manos jugadores:")
@@ -74,11 +78,13 @@ internal sealed class Program
 	}
 
 	private static bool _Robar (
-		string nombreJugadorTurno,
-		Carta cartaCogidaMonton,
-		Jugador[] jugadores,
-		byte totalCartasMonton)
+		DatosDecisionRobar datosDecisionRobar)
 	{
+		var nombreJugadorTurno = datosDecisionRobar.JugadorTurno.Nombre;
+		var cartaCogidaMonton = datosDecisionRobar.CartaCogidaMonton;
+		var jugadores = datosDecisionRobar.Jugadores;
+		var totalCartasMonton = datosDecisionRobar.TotalCartasMonton;
+
 		return ConsolaManager.PreguntarSiNo(tb => tb
 			.Con1Tab($"FASE DE ROBAR ({nombreJugadorTurno})")
 				.Con2Tab("Manos jugadores:")
@@ -98,19 +104,18 @@ internal sealed class Program
 			.Con1Tab("¿Quieres volver a jugar?"));
 	}
 
-	private static IEnumerable<string> _FormatearCartasManos (Jugador[] jugadores)
+	private static IEnumerable<string> _FormatearCartasManos (
+		JugadorReadOnly[] jugadores)
 	{
 		return jugadores.Select(j =>
 			$"{j.Nombre.PadRight(_CantidadCaracteresNombreJugadorMasLargo)}: " +
 			$"{_FormatearCartasMano(j)}");
 	}
 
-	private static string _FormatearCartasMano (Jugador jugador)
+	private static string _FormatearCartasMano (JugadorReadOnly jugador)
 	{
 		return
-			jugador.Mano.Cartas
-			.OrderBy(kvp => (byte)kvp.Key)
-			.SelectMany(kvp => kvp.Value)
+			jugador.CartasManoCollection
 			.Select(c => ((byte)c.Valor).ToString())
 			.JoinStrings(" - ");
 	}

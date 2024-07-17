@@ -1,5 +1,7 @@
 ﻿
-namespace Pelusas.Logica;
+using Pelusas.Logica.Enums;
+
+namespace Pelusas.Logica.Elementos;
 
 public sealed class Carta : IComparable<Carta>
 {

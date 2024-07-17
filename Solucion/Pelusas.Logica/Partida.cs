@@ -1,14 +1,17 @@
 ﻿
+using Pelusas.Logica.Decisiones;
+using Pelusas.Logica.Elementos;
+
 namespace Pelusas.Logica;
 
 public sealed class Partida
 {
 	private readonly Jugador[] _Jugadores;
 	private readonly Monton _Monton = new();
-	private readonly Decisiones _Decisiones;
+	private readonly FuncionesDecisiones _Decisiones;
 
 	public Partida (
-		Decisiones decisiones,
+		FuncionesDecisiones decisiones,
 		params string[] nombresJugadores)
 	{
 		if (nombresJugadores.Length < 2 || nombresJugadores.Length > 6)
@@ -24,11 +27,11 @@ public sealed class Partida
 	{
 		while (true)
 		{
-			foreach (var jugador in _Jugadores)
+			foreach (var jugadorTurno in _Jugadores)
 			{
-				var restoJugadores = _Jugadores.Except([jugador]).ToArray();
+				var restoJugadores = _Jugadores.Except([jugadorTurno]).ToArray();
 
-				_Turno(_Jugadores, jugador, restoJugadores, _Monton, _Decisiones);
+				_Turno(jugadorTurno, restoJugadores, _Monton, _Decisiones);
 
 				if (_Monton.TotalCartas == 0)
 				{
@@ -60,11 +63,10 @@ public sealed class Partida
 	}
 
 	private static void _Turno (
-		Jugador[] todosJugadores,
 		Jugador jugadorTurno,
 		Jugador[] restoJugadores,
 		Monton monton,
-		Decisiones decisiones)
+		FuncionesDecisiones decisiones)
 	{
 		_FaseRecoger(jugadorTurno);
 
@@ -76,7 +78,7 @@ public sealed class Partida
 			}
 
 			var cartaCogidaMonton =
-				_FaseBuscar(todosJugadores, jugadorTurno, monton, decisiones);
+				_FaseBuscar(jugadorTurno, restoJugadores, monton, decisiones);
 
 			if (cartaCogidaMonton is null)
 			{
@@ -90,36 +92,32 @@ public sealed class Partida
 			if (algunOtroJugadorTieneCartasMismoValor)
 			{
 				_FaseRobar(
-					todosJugadores,
-					jugadorTurno,
-					restoJugadores,
-					monton,
-					cartaCogidaMonton,
-					decisiones);
+					jugadorTurno, restoJugadores, monton, cartaCogidaMonton, decisiones);
 			}
 		}
 	}
 
-	private static bool _PierdeTurno (Jugador jugador, Carta cartaCogidaMonton)
+	private static bool _PierdeTurno (Jugador jugadorTurno, Carta cartaCogidaMonton)
 	{
 		return
-			jugador.Mano.ContieneAlgunaCartaPorValor(cartaCogidaMonton.Valor)
-			&& jugador.Mano.TotalCartas >= 3;
+			jugadorTurno.Mano.ContieneAlgunaCartaPorValor(cartaCogidaMonton.Valor)
+			&& jugadorTurno.Mano.TotalCartas >= 3;
 	}
 
-	private static void _FaseRecoger (Jugador jugador)
+	private static void _FaseRecoger (Jugador jugadorTurno)
 	{
-		jugador.RecogerMano();
+		jugadorTurno.RecogerMano();
 	}
 
 	private static Carta? _FaseBuscar (
-		Jugador[] todosJugadores,
 		Jugador jugadorTurno,
+		Jugador[] restoJugadores,
 		Monton monton,
-		Decisiones decisiones)
+		FuncionesDecisiones decisiones)
 	{
 		var jugadorDecideBuscar =
-			decisiones.Buscar(jugadorTurno.Nombre, todosJugadores, monton.TotalCartas);
+			decisiones.Buscar(
+				new(jugadorTurno, restoJugadores, monton.TotalCartas));
 
 		if (!jugadorDecideBuscar)
 		{
@@ -145,16 +143,15 @@ public sealed class Partida
 	}
 
 	private static void _FaseRobar (
-		Jugador[] todosJugadores,
-		Jugador jugador,
+		Jugador jugadorTurno,
 		Jugador[] restoJugadores,
 		Monton monton,
 		Carta cartaCogidaMonton,
-		Decisiones decisiones)
+		FuncionesDecisiones decisiones)
 	{
 		var jugadorDecideRobar =
 			decisiones.Robar(
-				jugador.Nombre, cartaCogidaMonton, todosJugadores, monton.TotalCartas);
+				new(jugadorTurno, restoJugadores, monton.TotalCartas, cartaCogidaMonton));
 
 		if (jugadorDecideRobar)
 		{
@@ -163,7 +160,7 @@ public sealed class Partida
 				.SelectMany(j => j.Mano.QuitarPorValor(cartaCogidaMonton.Valor))
 				.ToList();
 
-			jugador.Mano.Anadir(cartaCogidaMonton.Valor, cartasRobadas);
+			jugadorTurno.Mano.Anadir(cartaCogidaMonton.Valor, cartasRobadas);
 		}
 	}
 }

@@ -1,4 +1,6 @@
 ﻿
+using Pelusas.Logica.Elementos;
+
 namespace Pelusas.Logica;
 
 public sealed class Resultados

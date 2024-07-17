@@ -1,5 +1,5 @@
 ﻿
-namespace Pelusas.Logica;
+namespace Pelusas.Logica.Elementos;
 
 public sealed class Puntuacion
 {
